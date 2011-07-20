@@ -1,3 +1,6 @@
+$:.unshift File.join(File.dirname(__FILE__), 'lib')
+
+require 'tassadar/mpq'
+
 module Tassadar
-  # Your code goes here...
 end

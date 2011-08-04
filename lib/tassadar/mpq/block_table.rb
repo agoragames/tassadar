@@ -3,11 +3,11 @@ module Tassadar
     class BlockTable < BinData::Record
       endian :little
 
-      array :blocks do
-        int32 :block_offset
-        int32 :block_size
-        int32 :file_size
-        int32 :flags
+      array :blocks, :read_until => :eof do
+        uint32 :block_offset
+        uint32 :block_size
+        uint32 :file_size
+        uint32 :flags
       end
     end
 
@@ -15,11 +15,12 @@ module Tassadar
       mandatory_parameters :entries
 
       def read_and_return_value(io)
-        BlockTable.read(Tassadar::MPQ.decrypt_block(io, eval_parameter(:entries) * 16, Tassadar::MPQ.hash_string("(block table)", 0x300)))
+        value = BlockEncryptor.new("(block table)", 0x300, io, eval_parameter(:entries) * 16).decrypt
+        BlockTable.read(value)
       end
 
       def value_to_binary_string(value)
-        MPQ.encrypt_block(value.to_binary_string, eval_parameter(:entries) * 16, Tassadar::MPQ.hash_string("(block table)", 0x300))
+        BlockEncryptor.new("(block table)", 0x300, value, eval_parameter(:entries) * 16).encrypt
       end
 
       def sensible_default

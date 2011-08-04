@@ -28,7 +28,7 @@ describe Tassadar::MPQ::ArchiveHeader do
   end
 
   it "should read the archive size" do
-    @archive_header.archive_size.should == 99327
+    @archive_header.archive_size.should == 13648
   end
 
   it "should read the format version" do
@@ -40,7 +40,7 @@ describe Tassadar::MPQ::ArchiveHeader do
   end
 
   it "should read the hash table offset" do
-    @archive_header.hash_table_offset.should == 98911
+    @archive_header.hash_table_offset.should == 13232
   end
 
   it "should read the block table offset" do

@@ -16,13 +16,13 @@ module Tassadar
     class HashTable < BinData::Record
       endian :little
 
-      array :hashes do
-        int32 :file_path_hash_a
-        int32 :file_path_hash_b
-        int16 :language
-        int8  :platform
+      array :hashes, :read_until => :eof do
+        uint32 :file_path_hash_a
+        uint32 :file_path_hash_b
+        uint16 :language
+        uint8  :platform
         skip  :length => 1
-        int32 :file_block_index
+        uint32 :file_block_index
       end
     end
 
@@ -30,11 +30,12 @@ module Tassadar
       mandatory_parameters :entries
 
       def read_and_return_value(io)
-        HashTable.read(Tassadar::MPQ.decrypt_block(io, eval_parameter(:entries) * 16, Tassadar::MPQ.hash_string("(hash table)", 0x300)))
+        value = BlockEncryptor.new("(hash table)", 0x300, io, eval_parameter(:entries) * 16).decrypt
+        HashTable.read(value)
       end
 
       def value_to_binary_string(value)
-        MPQ.encrypt_block(value.to_binary_string, eval_parameter(:entries) * 16, Tassadar::MPQ.hash_string("(hash table)", 0x300))
+        BlockEncryptor.new("(hash table)", 0x300, value, eval_parameter(:entries) * 16).encrypt
       end
 
       def sensible_default

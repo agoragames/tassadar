@@ -7,11 +7,11 @@ module Tassadar
       int8   :magic_4, :check_value => 26
 
       int32  :header_size, :check_value => 44
-      int32  :archive_size
+      uint32  :archive_size
       int16  :format_version
       int8   :sector_size_shift, :check_value => 3
       skip   :length => 1
-      int32  :hash_table_offset
+      uint32  :hash_table_offset
       int32  :block_table_offset
       int32  :hash_table_entries
       int32  :block_table_entries

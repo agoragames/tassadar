@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
   s.name        = "tassadar"
   s.version     = Tassadar::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["Matt Pruitt"]
+  s.email       = ["mpruitt@agoragames.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Pure ruby MPQ and SC2 Replay parser}
+  s.description = %q{Pure ruby MPQ and SC2 Replay parser}
 
   s.rubyforge_project = "tassadar"
 

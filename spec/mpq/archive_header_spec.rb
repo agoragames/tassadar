@@ -2,16 +2,16 @@ require 'spec_helper'
 
 describe Tassadar::MPQ::ArchiveHeader do
   before(:each) do
-    @archive_header = Tassadar::MPQ::ArchiveHeader.read("MPQ\x1A,\x00\x00\x00\xFF\x83\x01\x00\x01\x00\x03\x00_\x82\x01\x00_\x83\x01\x00\x10\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00")
+    @archive_header = Tassadar::MPQ::ArchiveHeader.read("MPQ\x1A,\x00\x00\x00P5\x00\x00\x01\x00\x03\x00\xB03\x00\x00\xB04\x00\x00\x10\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00")
   end
 
   describe "require a valid magic string" do
     it "should accept a valid magic string" do
-      expect { Tassadar::MPQ::ArchiveHeader.read("MPQ\x1A,\x00\x00\x00\xFF\x83\x01\x00\x01\x00\x03\x00_\x82\x01\x00_\x83\x01\x00\x10\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00") }.to_not raise_error
+      expect { Tassadar::MPQ::ArchiveHeader.read("MPQ\x1A,\x00\x00\x00P5\x00\x00\x01\x00\x03\x00\xB03\x00\x00\xB04\x00\x00\x10\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00") }.to_not raise_error
     end
 
     it "should not accept an invalid magic string" do
-      expect { Tassadar::MPQ.ArchiveHeader.read("MPQ\x1A,\x00\x00\x00\xFF\x83\x01\x00\x01\x00\x03\x00_\x82\x01\x00_\x83\x01\x00\x10\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00") }.to raise_error
+      expect { Tassadar::MPQ.ArchiveHeader.read("MPQ\x1A,\x00\x00\x00P5\x00\x00\x01\x00\x03\x00\xB03\x00\x00\xB04\x00\x00\x10\x00\x00\x00\n\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00") }.to raise_error
     end
   end
 
@@ -44,13 +44,14 @@ describe Tassadar::MPQ::ArchiveHeader do
   end
 
   it "should read the block table offset" do
-    @archive_header.block_table_offset.should == 99167
+    @archive_header.block_table_offset.should == 13488
   end
 
   it "should read the hash table entries" do
     @archive_header.hash_table_entries.should > 0
     @archive_header.hash_table_entries.should < 2 ** 20
     Math.log2(@archive_header.hash_table_entries.to_i).floor.should == Math.log2(@archive_header.hash_table_entries.to_i).ceil
+    @archive_header.hash_table_entries.should == 16
   end
 
   it "should read the block table entries" do

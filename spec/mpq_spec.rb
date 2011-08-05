@@ -21,7 +21,12 @@ describe Tassadar::MPQ::MPQ do
     @mpq.hash_table.hashes.size.should == 16
   end
 
-  pending "should have files" do
-    @mpq.file_data.first.sector_offset_table.size.should > 0
+  it "should have files" do
+    @mpq.file_data.size.should > 1
+  end
+
+  it "should have a list of files" do
+    @mpq.files.size.should == 8
+    @mpq.files.should include("replay.attributes.events")
   end
 end

@@ -1,10 +1,56 @@
+require 'zlib'
+require 'bzip2'
+
 module Tassadar
   module MPQ
     class FileData < BinData::Record
+      MPQ_FILE_ENCRYPTED = 0x00010000
+      MPQ_FILE_EXISTS = 0x80000000
+      MPQ_SINGLE_UNIT = 0x01000000
+      MPQ_COMPRESSED = 0x00000200
+
+      attr_accessor :block_offset
+
       endian :little
 
-      array :sector_offset_table, :type => :int32,
-                                  :initial_length => lambda { eval_parameter(:sectors) }
+      string :data, :read_length => lambda { block.block_size }
+
+      def decompressed_data
+        result = nil
+        block = eval_parameter(:block)
+
+        if (block.flags & MPQ_FILE_EXISTS) > 0
+          result = self.data
+        end
+
+        if (block.flags & MPQ_FILE_ENCRYPTED) > 0
+          raise NotImplementedError
+        end
+
+        if (block.flags & MPQ_SINGLE_UNIT) > 0
+          if block.flags & MPQ_COMPRESSED && block.file_size > block.block_size
+            result = decompress(self.data)
+          end
+        else
+        end
+
+        result
+      end
+
+      private
+      def decompress(data)
+        compression_type = data.bytes.first
+        case compression_type
+        when 0
+          data
+        when 2
+          Zlib::Deflate.deflate(data[1,data.size - 1])
+        when 16
+          Bzip2.uncompress(data[1,data.size - 1])
+        else
+          raise NotImplementedError
+        end
+      end
     end
 
     class FileDataArray < BinData::BasePrimitive
@@ -15,8 +61,12 @@ module Tassadar
         sector_size = 512 * (2 ** eval_parameter(:sector_size_shift))
 
         eval_parameter(:blocks).each do |block|
-          result << FileData.new(:adjust_offset => block["block_offset"],
-                                 :sectors => (block["block_size"] / sector_size))
+          num_sectors = block.flags & 0x01000000 ? 1 : (block["block_size"] / sector_size)
+          file = FileData.new(:adjust_offset => block.block_offset + eval_parameter(:archive_header_offset),
+                              :block => block).read(io)
+          file.block_offset = block.block_offset
+
+          result << file
         end
 
         result

@@ -10,38 +10,10 @@ module Tassadar
         @size = size
       end
 
-      def self.hash_string(key, offset)
-        BlockEncryptor.new(key, offset, nil, nil).hash_string
-      end
-
       def decrypt
-        seed1 = hash_string
+        seed1 = hash_string(key, offset)
         seed2 = 0xEEEEEEEE
         result = ""
-        size = @size
-
-        while size >= 4
-          seed2 += encryption_table[0x400 + (seed1 & 0xFF)]
-          seed2 &= 0xFFFFFFFF
-
-          value = buffer.readbytes(4).unpack("V").first
-          value = (value ^ (seed1 + seed2)) & 0xFFFFFFFF
-
-          result += [value].pack("V")
-
-          seed1 = ((~seed1 << 0x15) + 0x11111111) | (seed1 >> 0x0B)
-          seed1 &= 0xFFFFFFFF
-          seed2 = value + seed2 + (seed2 << 5) + 3 & 0xFFFFFFFF
-          size = size - 4
-        end
-
-        result
-      end
-
-      def encrypt
-        seed1 = hash_string
-        seed2 = 0xEEEEEEEE
-        encrypted_block = []
 
         while @size >= 4
           seed2 += encryption_table[0x400 + (seed1 & 0xFF)]
@@ -50,28 +22,37 @@ module Tassadar
           value = buffer.readbytes(4).unpack("V").first
           value = (value ^ (seed1 + seed2)) & 0xFFFFFFFF
 
-          encrypted_block << value
+          result += value.pack("V")
 
-          seed = ((~seed1 << 0x15) + 0x11111111) | (seed1 >> 0x0B)
+          seed1 = ((~seed1 << 0x15) + 0x11111111) | (seed1 >> 0x0B)
           seed2 = value + seed2 + (seed2 << 5) + 3 & 0xFFFFFFFF
-
           @size = @size - 4
         end
 
-        encrypted_block.pack("V*")
+        result
       end
 
-      def hash_string
-        seed1 = 0x7FED7FED
+      def encrypt
+        seed1 = hash_string(key, offset)
         seed2 = 0xEEEEEEEE
+        encrypted_block = []
 
-        @key.upcase.each_byte do |char|
-          value = encryption_table[@offset + char]
-          seed1 = (value ^ (seed1 + seed2)) & 0xFFFFFFFF
-          seed2 = char + seed1 + seed2 + (seed2 << 5) + 3 & 0xFFFFFFFF
+        while @size >= 4
+          seed2 += encryption_table[0x400 + (seed & 0xFF)]
+          seed2 &= 0xFFFFFFFF
+
+          value = buffer.readbytes(4).unpack("V").first
+          value = (current_data ^ (seed1 + seed2)) & 0xFFFFFFFF
+
+          encrypted_block << value
+
+          seed = ((~seed << 0x15) + 0x11111111) | (seed1 >> 0x0B)
+          seed2 = value + seed2 + (seed2 << 5) + 3 & 0xFFFFFFFF
+
+          size = size - 4
         end
 
-        seed1
+        encrypted_block.pack("V*")
       end
 
       private
@@ -98,6 +79,32 @@ module Tassadar
 
           crypt_buf
         end
+      end
+
+      def hash_string(key, offset)
+        seed1 = 0x7FED7FED
+        seed2 = 0xEEEEEEEE
+
+        key.upcase.each_byte do |char|
+          seed1 = encryption_table[offset + char] ^ add_big(seed1, seed2)
+          seed2 = add_big(add_big(char, add_big(seed1, add_big(seed2, (seed2 << 5)))), 3)
+        end
+
+        seed1
+      end
+
+      def add_big(a, b)
+        ah = (a >> 16) & 0xFFFF
+        al = a & 0xFFFF
+
+        bh = (b >> 16) & 0xFFFF
+        bl = b & 0xFFFF
+
+        cl = al + bl
+        ch = ah + bh
+        ch += ((cl >> 16) & 0xFFFF) if (cl > 0xFFFF)
+
+        return (((ch << 16) & (0xFFFF << 16)) | (cl & 0xFFFF))
       end
 
     end

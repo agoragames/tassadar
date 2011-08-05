@@ -35,11 +35,16 @@ module Tassadar
       end
 
       def value_to_binary_string(value)
+        packed_string = ""
+        value.hashes.each do |hash|
+          packed_string += [hash.file_path_hash_a, hash.file_path_hash_b, hash.language, hash.platform, 0, hash.file_block_index].pack("VVvCCV")
+        end
+
         BlockEncryptor.new("(hash table)", 0x300, value, eval_parameter(:entries) * 16).encrypt
       end
 
       def sensible_default
-        [0,0,0,0,0,0,0,0,0].pack("VVvCVVVVVV")
+        [0,0,0,0,0,0].pack("VVvCCV")
       end
     end
 

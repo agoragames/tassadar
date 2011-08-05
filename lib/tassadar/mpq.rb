@@ -30,7 +30,7 @@ module Tassadar
                                           :archive_header_offset => :archive_header_offset
 
       def files
-        read_file('(listfile)').split
+        @files ||= read_file('(listfile)').split
       end
 
       def read_file(filename)

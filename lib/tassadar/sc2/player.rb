@@ -13,6 +13,10 @@ module Tassadar
         @actual_race = details_hash[2]
         @handicap = details_hash[6]
       end
+
+      def winner?
+        @won
+      end
     end
   end
 end

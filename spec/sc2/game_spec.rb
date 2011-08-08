@@ -20,4 +20,12 @@ describe Tassadar::SC2::Game do
   it "should set the speed" do
     @replay.game.speed.should == "Faster"
   end
+
+  it "should set the game type" do
+    @replay.game.type.should == "1v1"
+  end
+
+  it "should set the category" do
+    @replay.game.category.should == "Ladder"
+  end
 end

@@ -30,7 +30,7 @@ module Tassadar
       def read_byte_string(io)
         num_bytes = io.readbytes(1).unpack("C").first >> 1
 
-        io.readbytes(num_bytes).unpack("A#{num_bytes}").first
+        io.readbytes(num_bytes).unpack("A#{num_bytes}").first.force_encoding('UTF-8')
       end
 
       def read_small_int(io)

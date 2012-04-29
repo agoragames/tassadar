@@ -1,5 +1,7 @@
-require 'bundler'
-Bundler::GemHelper.install_tasks
+#!/usr/bin/env rake
+require "bundler/gem_tasks"
+require 'rake'
+require 'rspec/core/rake_task'
 
 desc "Open an irb session preloaded with this library"
 task :console do
@@ -10,3 +12,11 @@ desc "Automatically run specs when files change."
 task :"spec:watchr" do
   sh "watchr spec/spec_watchr.rb"
 end
+
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = 'spec/**/*_spec.rb'
+  spec.rspec_opts = ['--backtrace']
+  # spec.ruby_opts = ['-w']
+end
+
+task :default => :spec

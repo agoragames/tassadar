@@ -6,9 +6,9 @@ Gem::Specification.new do |s|
   s.name        = "tassadar"
   s.version     = Tassadar::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Matt Pruitt"]
-  s.email       = ["mpruitt@agoragames.com"]
-  s.homepage    = ""
+  s.authors     = ["Matt Pruitt", "Andrew Nordman"]
+  s.email       = ["mpruitt@agoragames.com", "anordman@agoragames.com"]
+  s.homepage    = "https://github.com/agoragames/tassadar"
   s.summary     = %q{Pure ruby MPQ and SC2 Replay parser}
   s.description = %q{Pure ruby MPQ and SC2 Replay parser}
 

@@ -21,4 +21,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency("bindata")
   s.add_dependency("bzip2-ruby")
+  s.add_development_dependency("pry")
 end

@@ -5,16 +5,21 @@ module Tassadar
         key = io.readbytes(1).unpack("C").first
 
         case key
+        when 0
+          read_array(io)
         when 2
           read_byte_string(io)
+        when 3
+          flag = io.readbytes(1)
+          read_and_return_value(io)
         when 4
-          read_array(io)
+          read_flag(io)
         when 5
           read_kvo(io)
         when 6
           read_small_int(io)
         when 7
-          read_big_int(io)
+          io.readbytes(4)
         when 9
           read_vlf_int(io)
         else
@@ -55,17 +60,25 @@ module Tassadar
         (value & 1) == 1 ? -(value >> 1) : (value >> 1)
       end
 
+      def read_flag(io)
+        switch = io.readbytes(1).unpack("C").first
+
+        if switch == 1
+          read_and_return_value(io)
+        else
+          return 0
+        end
+      end
+
       def read_array(io)
-        result = []
-        2.times { io.readbytes(1).unpack("C").first }
-
-        num_elements = io.readbytes(1).unpack("C").first >> 1
-
-        num_elements.times do
-          result << read_and_return_value(io)
+        entries = read_vlf_int(io)
+        results = []
+        
+        entries.times do
+          results << read_and_return_value(io)
         end
 
-        result
+        results
       end
 
       def read_kvo(io)

@@ -2,15 +2,11 @@ require 'spec_helper'
 
 describe Tassadar::MPQ::MPQ do
   before(:each) do
-    @mpq = Tassadar::MPQ::MPQ.read(File.read("spec/replays/Delta\ Quadrant.SC2Replay"))
-  end
-
-  it "should have a valid magic string" do
-    @mpq.magic.should == "MPQ"
+    @mpq = Tassadar::MPQ::MPQ.read(File.read("spec/replays/patch150.SC2Replay"))
   end
 
   it "should read the user data size" do
-    @mpq.user_data_size.should == 512
+    @mpq.user_data_length.should == 60
   end
 
   it "should have block_table entries" do

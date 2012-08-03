@@ -15,14 +15,6 @@ describe Tassadar::MPQ::ArchiveHeader do
     end
   end
 
-  it "should read the magic header" do
-    @archive_header.magic.should == "MPQ"
-  end
-
-  it "should read magic 4" do
-    @archive_header.magic_4.should == 26
-  end
-
   it "should read the header size" do
     @archive_header.header_size.should == 44
   end

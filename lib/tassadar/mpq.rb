@@ -7,17 +7,16 @@ require 'tassadar/mpq/file_data'
 require 'tassadar/mpq/block_table'
 require 'tassadar/mpq/hash_table'
 require 'tassadar/mpq/block_encryptor'
-
 module Tassadar
   module MPQ
     class MPQ < BinData::Record
       endian :little
 
-      string :magic, :length => 3, :check_value => "MPQ"
-      int8   :magic_4, :check_value => 27
-      int32  :user_data_size
-      int32  :archive_header_offset
-      string :user_data, :read_length => :user_data_size
+      string :user_magic, :length => 4
+      uint32 :user_data_max_length
+      uint32 :archive_header_offset
+      uint32 :user_data_length
+      string :user_data, :length => :user_data_length
 
       archive_header :archive_header, :adjust_offset => lambda { archive_header_offset }
       encrypted_block_table :block_table, :entries => lambda { archive_header.block_table_entries },
@@ -28,7 +27,6 @@ module Tassadar
       file_data_array :file_data,         :blocks => lambda { block_table.blocks },
                                           :sector_size_shift => lambda { archive_header.sector_size_shift },
                                           :archive_header_offset => :archive_header_offset
-
       def files
         @files ||= read_file('(listfile)').split
       end

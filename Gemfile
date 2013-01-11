@@ -5,6 +5,6 @@ gemspec
 
 gem 'rspec'
 gem 'watchr'
-gem 'ruby-debug19'
+#gem 'ruby-debug19'
 gem 'rr'
 gem 'rake'

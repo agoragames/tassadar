@@ -40,8 +40,8 @@ describe Tassadar::MPQ::ArchiveHeader do
   end
 
   it "should read the hash table entries" do
-    @archive_header.hash_table_entries.should > 0
-    @archive_header.hash_table_entries.should < 2 ** 20
+    @archive_header.hash_table_entries.value.should > 0
+    @archive_header.hash_table_entries.value.should < 2 ** 20
     Math.log2(@archive_header.hash_table_entries.to_i).floor.should == Math.log2(@archive_header.hash_table_entries.to_i).ceil
     @archive_header.hash_table_entries.should == 16
   end

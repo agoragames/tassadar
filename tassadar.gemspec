@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "tassadar/version"
 
 Gem::Specification.new do |s|
-  s.name        = "tassadar"
+  s.name        = "tassadar-pure"
   s.version     = Tassadar::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Matt Pruitt", "Andrew Nordman"]
@@ -20,6 +20,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency("bindata")
-  s.add_dependency("bzip2-ruby")
+  s.add_dependency("rbzip2")
   s.add_development_dependency("pry")
 end

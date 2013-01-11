@@ -1,5 +1,6 @@
 require 'zlib'
-require 'bzip2'
+require 'rbzip2'
+require 'stringio'
 
 module Tassadar
   module MPQ
@@ -46,7 +47,7 @@ module Tassadar
         when 2
           Zlib::Deflate.deflate(data[1,data.size - 1])
         when 16
-          Bzip2.uncompress(data[1,data.size - 1])
+          RBzip2::Decompressor.new(StringIO.new(data[1,data.size - 1])).read
         else
           raise NotImplementedError
         end

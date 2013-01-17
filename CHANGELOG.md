@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.0
+
+* Tassadar is now compatible with JRuby. Thanks to [Emmanuel Hadoux](https://github.com/EHadoux) for the pull request.
+
 ## 0.1.0
 
 * Updates serialization strategy for SC2 1.5 compliance

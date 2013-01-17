@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "tassadar/version"
 
 Gem::Specification.new do |s|
-  s.name        = "tassadar-pure"
+  s.name        = "tassadar"
   s.version     = Tassadar::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Matt Pruitt", "Andrew Nordman"]

@@ -1,6 +1,14 @@
 # Tassadar
 
-Starcraft 2 replay parser written in pure-Ruby.
+A fast Starcraft 2 replay parser written in pure Ruby... now with JRuby support! See below for performance comparison.
+
+## Tested under..
+
+* ruby-1.9.3-p194
+* jruby-1.7.0
+* jruby-1.7.2
+
+*Not compatible with jruby-1.6.*
 
 ## Installation
 
@@ -43,6 +51,86 @@ Or the player objects:
 replay.players.first	
 => #<Tassadar::SC2::Player:0x007f9e41e31a48 @name="guitsaru", @id=1918894, @won=false, @color={:alpha=>255, :red=>180, :green=>20, :blue=>30}, @chosen_race="Terran", @actual_race="Terran", @handicap=100>
 ```
+
+## Benchmarks (including ruby startup time)
+
+### tassadar 0.1.0 ( ruby-1.9.3-p194 )
+
+    $ time ruby -r tassadar -e "puts Tassadar::SC2::Replay.new('spec/replays/random.SC2Replay').game.winner.name"
+    PaWeL
+
+    real    0m0.181s
+    user    0m0.163s
+    sys     0m0.013s
+
+### tassadar-jruby-compat ( ruby-1.9.3-p194 )
+
+    $ time ruby -r tassadar -e "puts Tassadar::SC2::Replay.new('spec/replays/random.SC2Replay').game.winner.name"
+    PaWeL
+
+    real    0m0.204s
+    user    0m0.193s
+    sys     0m0.010s
+
+### tassadar-jruby-compat ( jruby-1.6.7.2 )
+
+    $ ruby -e "require 'rubygems'; require 'tassadar'; puts Tassadar::SC2::Replay.new('spec/replays/random.SC2Replay').game.winner.name"
+    NameError: field 'id' shadows an existing method in Tassadar::SC2::Attribute
+
+### tassadar-jruby-compat ( jruby-1.7.0 )
+
+    $ time ruby -e "require 'rubygems'; require 'tassadar'; puts Tassadar::SC2::Replay.new('spec/replays/random.SC2Replay').game.winner.name"
+    PaWeL
+
+    real    0m3.824s
+    user    0m8.706s
+    sys     0m0.153s
+
+### tassadar-jruby-compat ( jruby-1.7.2 )
+
+    $ time ruby -e "require 'rubygems'; require 'tassadar'; puts Tassadar::SC2::Replay.new('spec/replays/random.SC2Replay').game.winner.name"
+    PaWeL
+
+    real    0m3.742s
+    user    0m8.616s
+    sys     0m0.130s
+
+## Benchmarks (parsing only)
+
+### Method
+
+    require 'tassadar'
+    require 'benchmark'
+
+    puts Benchmark.measure {
+      puts Tassadar::SC2::Replay.new('spec/replays/random.SC2Replay').game.winner.name
+    }
+
+### tassadar 0.1.0 ( ruby-1.9.3-p194 )
+
+    $ ruby ./benchmark.rb 
+    PaWeL
+      0.020000   0.000000   0.020000 (  0.018816)
+
+
+### tassadar-jruby-compat ( ruby-1.9.3-p194 )
+
+    $ ruby ./benchmark.rb 
+    PaWeL
+      0.040000   0.000000   0.040000 (  0.038560)
+
+
+### tassadar-jruby-compat ( jruby-1.7.0 )
+
+    $ ruby ./benchmark.rb 
+    PaWeL
+      2.330000   0.010000   2.340000 (  0.904000)
+
+### tassadar-jruby-compat ( jruby-1.7.2 )
+
+    $ ruby ./benchmark.rb 
+    PaWeL
+      2.110000   0.060000   2.170000 (  0.861000)
 
 ## Contributing
 

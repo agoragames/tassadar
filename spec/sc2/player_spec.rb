@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Tassadar::SC2::Player do
   context 'NA Sc2 Replay' do
     before(:each) do
-      @replay = Tassadar::SC2::Replay.new("spec/replays/OhanaLE.SC2Replay")
+      @replay = Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, "OhanaLE.SC2Replay"))
       @player = @replay.players.last
     end
 
@@ -38,7 +38,7 @@ describe Tassadar::SC2::Player do
   end
 
   context 'EU SC2 Replay' do
-    let(:replay) { Tassadar::SC2::Replay.new('spec/replays/eu_replay.SC2Replay') }
+    let(:replay) { Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, 'eu_replay.SC2Replay')) }
     subject  { replay.players.last }
 
     it 'encodes the name in UTF-8' do

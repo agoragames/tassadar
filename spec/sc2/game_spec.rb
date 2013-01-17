@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Tassadar::SC2::Game do
   before(:each) do
-    @replay = Tassadar::SC2::Replay.new("spec/replays/patch150.SC2Replay")
+    @replay = Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, "patch150.SC2Replay"))
   end
 
   it "should set the winner" do

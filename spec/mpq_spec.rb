@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Tassadar::MPQ::MPQ do
   before(:each) do
-    @mpq = Tassadar::MPQ::MPQ.read(File.read("spec/replays/patch150.SC2Replay"))
+    @mpq = Tassadar::MPQ::MPQ.read(File.read(File.join(REPLAY_DIR, 'patch150.SC2Replay')))
   end
 
   it "should read the user data size" do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Tassadar::MPQ::ArchiveHeader do
   before(:each) do
-    @mpq = Tassadar::MPQ::MPQ.read(File.read("spec/replays/Delta\ Quadrant.SC2Replay"))
+    @mpq = Tassadar::MPQ::MPQ.read(File.read(File.join(REPLAY_DIR, "Delta\ Quadrant.SC2Replay")))
   end
 
   it "should have some blocks" do

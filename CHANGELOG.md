@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.3.0
+
+* Tassadar can now initialize replays by data as well as file name, for parsing out of db storage.
+
 ## 0.2.0
 
 * Tassadar is now compatible with JRuby. Thanks to [Emmanuel Hadoux](https://github.com/EHadoux) for the pull request.

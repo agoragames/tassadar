@@ -10,8 +10,8 @@ module Tassadar
     class Replay
       attr_accessor :mpq, :attributes, :details, :players, :game
 
-      def initialize(filename)
-        @mpq = MPQ::MPQ.read(File.read(filename))
+      def initialize(filename, data=nil)
+        @mpq = MPQ::MPQ.read(data.nil? ? File.read(filename) : data)
         @attributes = Attributes.read(@mpq.read_file("replay.attributes.events"))
         @details = Details.read(@mpq.read_file("replay.details"))
 

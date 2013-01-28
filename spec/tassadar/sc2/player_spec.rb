@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe Tassadar::SC2::Player do
-  context 'NA Sc2 Replay' do
+  context 'NA SC2 Replay' do
     before(:each) do
       @replay = Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, "OhanaLE.SC2Replay"))
       @player = @replay.players.last

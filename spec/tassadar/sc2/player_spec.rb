@@ -35,6 +35,10 @@ describe Tassadar::SC2::Player do
     it "should have a handicap" do
       @player.handicap.should == 100
     end
+
+    it "should set the team" do 
+      @player.team.should == 0
+    end
   end
 
   context 'EU SC2 Replay' do

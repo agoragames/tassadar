@@ -1,7 +1,7 @@
 module Tassadar
   module SC2
     class Player
-      attr_accessor :name, :id, :won, :color, :chosen_race, :actual_race, :handicap
+      attr_accessor :name, :id, :won, :color, :chosen_race, :actual_race, :handicap, :team
 
       def initialize(details_hash, attributes)
         @name = details_hash[0]
@@ -12,6 +12,7 @@ module Tassadar
         @chosen_race = races[attributes.select {|a| a.id == 0x0BB9 && a.player_number == details_hash[7] + 1}.first.attribute_value]
         @actual_race = details_hash[2]
         @handicap = details_hash[6]
+        @team = details_hash[5]
       end
 
       def winner?

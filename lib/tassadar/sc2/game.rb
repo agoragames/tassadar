@@ -3,7 +3,11 @@ module Tassadar
     class Game
       attr_accessor :map, :time, :winner, :speed, :type, :category
 
+      attr_reader :replay
+
       def initialize(replay)
+        @replay = replay
+
         @winner = replay.players.select {|p| p.won}.first
         @time = convert_windows_to_ruby_date_time(replay.details.data[5], replay.details.data[6])
         @map = replay.details.data[1]
@@ -14,6 +18,10 @@ module Tassadar
 
         categories = {"Amm" => "Ladder", "Priv" => "Private", "Pub" => "Public"}
         @category = categories[replay.attributes.attributes.select {|a| a.id == 3009}.first.attribute_value]
+      end
+
+      def winners
+        replay.players.select {|player| player.won }
       end
 
       private

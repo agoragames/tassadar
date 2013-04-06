@@ -28,4 +28,17 @@ describe Tassadar::SC2::Game do
   it "should set the category" do
     @replay.game.category.should == "Ladder"
   end
+
+  context "2v2's" do
+    let(:replay) { Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, "2v2.SC2Replay")) }
+
+    it "returns the game winners" do
+      expect(replay.game).to have(2).winners
+    end
+
+    it "returns the correct winners" do
+      winners = replay.game.winners.map(&:name)
+      expect(winners).to eq ["EaglePunch", "JZTD"]
+    end
+  end
 end

@@ -1,7 +1,8 @@
 module Tassadar
   module SC2
     class Player
-      attr_accessor :name, :id, :won, :color, :chosen_race, :actual_race, :handicap, :team
+      attr_accessor :id, :won, :color, :chosen_race, :actual_race, :handicap, :team
+      attr_writer :name
 
       def initialize(details_hash, attributes)
         @name = details_hash[0]
@@ -17,6 +18,10 @@ module Tassadar
 
       def winner?
         @won
+      end
+
+      def name
+        @name.gsub("<sp/>","")
       end
     end
   end

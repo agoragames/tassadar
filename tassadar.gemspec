@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/agoragames/tassadar"
   s.summary     = %q{Pure ruby MPQ and SC2 Replay parser}
   s.description = %q{Pure ruby MPQ and SC2 Replay parser}
+  s.license     = 'MIT'
 
   s.rubyforge_project = "tassadar"
 

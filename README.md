@@ -92,4 +92,4 @@ replay.players.first
 
 ## Copyright
 
-Copyright (c) 2011-2013 Agora Games. See LICENSE.txt for further details.
+Copyright (c) 2011-2014 Agora Games. See LICENSE.txt for further details.

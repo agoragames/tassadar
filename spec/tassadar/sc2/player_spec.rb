@@ -7,36 +7,36 @@ describe Tassadar::SC2::Player do
   context 'NA SC2 Replay' do
     let(:replay) { Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, "OhanaLE.SC2Replay")) }
 
-    it "should set the name" do
-      player.name.should == "MLGLogan"
+    it "sets the name" do
+      expect(player.name).to eq("MLGLogan")
     end
 
-    it "should set the id" do
-      player.id.should == 1485031
+    it "sets the id" do
+      expect(player.id).to eq(1485031)
     end
 
-    it "should tell if the player won" do
-      player.should_not be_winner
+    it "tells if the player won" do
+      expect(player).to_not be_winner
     end
 
-    it "should have a color" do
-      player.color.should == {:alpha => 255, :red => 0, :green => 66, :blue => 255}
+    it "has a color" do
+      expect(player.color).to eq({:alpha => 255, :red => 0, :green => 66, :blue => 255})
     end
 
-    it "should have random as the chosen race if random" do
-      player.chosen_race.should == "Random"
+    it "has random as the chosen race if random" do
+      expect(player.chosen_race).to eq("Random")
     end
 
-    it "should have an actual race" do
-      player.actual_race.should == "Protoss"
+    it "has an actual race" do
+      expect(player.actual_race).to eq("Protoss")
     end
 
-    it "should have a handicap" do
-      player.handicap.should == 100
+    it "has a handicap" do
+      expect(player.handicap).to eq(100)
     end
 
-    it "should set the team" do
-      player.team.should == 0
+    it "sets the team" do
+      expect(player.team).to eq(0)
     end
   end
 
@@ -44,13 +44,14 @@ describe Tassadar::SC2::Player do
     let(:replay) { Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, 'eu_replay.SC2Replay')) }
 
     it 'encodes the name in UTF-8' do
-      player.name.encoding.to_s.should == 'UTF-8'
-      player.name.should == 'MǂStephano'
+      expect(player.name.encoding.to_s).to eq('UTF-8')
+      expect(player.name).to eq('MǂStephano')
     end
   end
 
   context "replay with a player who has a clan tag" do
     let(:replay) { Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, 'game_with_clan_tag.SC2Replay')) }
+
     subject(:player) { replay.players.first }
 
     it "returns the name without a <sp/>" do

@@ -1,28 +1,26 @@
 require 'spec_helper'
 
 describe Tassadar::MPQ::ArchiveHeader do
-  before(:each) do
-    @mpq = Tassadar::MPQ::MPQ.read(File.read(File.join(REPLAY_DIR, "Delta\ Quadrant.SC2Replay")))
+  let(:mpq) { Tassadar::MPQ::MPQ.read(File.read(File.join(REPLAY_DIR, "Delta\ Quadrant.SC2Replay"))) }
+
+  it "has 10 blocks" do
+    expect(mpq.block_table.blocks.size).to eq(10)
   end
 
-  it "should have some blocks" do
-    @mpq.block_table.blocks.size.should == 10
+  it "has a valid block table entry" do
+    block = mpq.block_table.blocks.first
+    expect(block.block_offset).to eq(0x0000002C)
+    expect(block.block_size).to eq(448)
+    expect(block.file_size).to eq(448)
+    expect(block.flags).to eq(0x81000200)
   end
 
-  it "should have a valid block table entry" do
-    block = @mpq.block_table.blocks.first
-    block.block_offset.should == 0x0000002C
-    block.block_size.should == 448
-    block.file_size.should == 448
-    block.flags.should == 0x81000200
-  end
-  
-  it "should have another valid block table entry" do
-    block = @mpq.block_table.blocks[1]
-    block.block_offset.should == 0x000001EC
-    block.block_size.should == 652
-    block.file_size.should == 1216
-    block.flags.should == 0x81000200
+  it "has another valid block table entry" do
+    block = mpq.block_table.blocks[1]
+    expect(block.block_offset).to eq(0x000001EC)
+    expect(block.block_size).to eq(652)
+    expect(block.file_size).to eq(1216)
+    expect(block.flags).to eq(0x81000200)
   end
 end
 

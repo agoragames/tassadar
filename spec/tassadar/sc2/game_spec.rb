@@ -1,44 +1,42 @@
 require 'spec_helper'
 
 describe Tassadar::SC2::Game do
-  before(:each) do
-    @replay = Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, "patch150.SC2Replay"))
+  let(:replay) { Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, "patch150.SC2Replay")) }
+
+  it "sets the winner" do
+    expect(replay.game.winner.name).to eq("Ratbaxter")
   end
 
-  it "should set the winner" do
-    @replay.game.winner.name.should == "Ratbaxter"
+  it "sets the map" do
+    expect(replay.game.map).to eq("Scorched Haven")
   end
 
-  it "should set the map" do
-    @replay.game.map.should == "Scorched Haven"
+  it "sets the time" do
+    #expect(replay.game.time).to eq(Time.new(2012, 8, 2, 11, 00, 33, "-05:00"))
   end
 
-  it "should set the time" do
-    #@replay.game.time.should == Time.new(2012, 8, 2, 11, 00, 33, "-05:00")
+  it "sets the speed" do
+    expect(replay.game.speed).to eq("Faster")
   end
 
-  it "should set the speed" do
-    @replay.game.speed.should == "Faster"
+  it "sets the game type" do
+    expect(replay.game.type).to eq("2v2")
   end
 
-  it "should set the game type" do
-    @replay.game.type.should == "2v2"
-  end
-
-  it "should set the category" do
-    @replay.game.category.should == "Ladder"
+  it "sets the category" do
+    expect(replay.game.category).to eq("Ladder")
   end
 
   context "2v2's" do
     let(:replay) { Tassadar::SC2::Replay.new(File.join(REPLAY_DIR, "2v2.SC2Replay")) }
 
     it "returns the game winners" do
-      expect(replay.game).to have(2).winners
+      expect(replay.game.winners.length).to eq(2)
     end
 
     it "returns the correct winners" do
       winners = replay.game.winners.map(&:name)
-      expect(winners).to eq ["EaglePunch", "JZTD"]
+      expect(winners).to match_array(["EaglePunch", "JZTD"])
     end
   end
 end
